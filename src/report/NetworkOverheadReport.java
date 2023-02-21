@@ -59,14 +59,13 @@ public class NetworkOverheadReport extends Report implements MessageListener{
             }
             resultMsg+="\\"+" "
                     +"\\"+" "
-                    +format(pathLength_sum / count)+" ";//在程序退出前一刻的已使用缓存
+                    +format(pathLength_sum / count)+" ";
             write(resultMsg);
         }
         super.done();
     }
 
     protected void updateHostBufferUtility(Message m){
-        prevHops=avgHops.containsKey(m)?avgHops.get(m):0;
         avgHops.put(m, m.getPathLength());
     }
     @Override
@@ -92,16 +91,11 @@ public class NetworkOverheadReport extends Report implements MessageListener{
     @Override
     public void messageTransferred(Message m, DTNHost from, DTNHost to, boolean firstDelivery) {
         //??if the function is called after the message transferred from the fromhost to tohost???
-        updateHostBufferUtility(m);
+        if(m.getTo()==to){
+            updateHostBufferUtility(m);
+        }
     }
-    
-    protected double getBufferUsed(DTNHost host){
-        return host.getRouter().getBufferSize()-host.getRouter().getFreeBufferSize();
-    }
-    
-    protected double getBufferTotal(DTNHost host){
-        return host.getRouter().getBufferSize();
-    }
+
     
     
 }
