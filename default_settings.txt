@@ -10,7 +10,7 @@ Scenario.simulateConnections = true
 Scenario.updateInterval = 0.1
 # 决定messageRouter.java中的Update函数多久被执行一次，即为场景更新的时间
 # 43200s == 12h
-Scenario.endTime = 3600
+Scenario.endTime = 21600
 # 设置仿真结束时间，单位为秒，默认为12H
 
 
@@ -59,7 +59,8 @@ Scenario.nrofHostGroups = 3
 
 # Common settings for all groups
 Group.movementModel = ShortestPathMapBasedMovement
-Group.router = MyCustomRouter
+Group.router = EpidemicRouter
+Group.bufferManagement = AntPlusBufferManagement
 Group.bufferSize = 5M
 Group.waitTime = 0, 120
 # 设置所有组的等待时间为0-120
@@ -80,12 +81,12 @@ Group.nrofHosts = 40
 # group1 (pedestrians) specific settings 对不同的分组进行不同的设置，设置第一组为行人p
 Group1.groupID = p
 Group1.nrofHosts = 15
-Group1.bufferSize = 3M
+Group1.bufferSize = 5M
 
 # group2 specific settings 对不同的分组进行设置，设置第二组
 Group2.groupID = c
 Group2.nrofHosts = 30
-Group2.bufferSize = 4M
+Group2.bufferSize = 5M
 
 # 设置第二组的ID编号为c。即为car
 # cars can drive only on roads 设置第二组只能在道路上移动

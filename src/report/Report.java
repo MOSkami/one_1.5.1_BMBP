@@ -57,6 +57,8 @@ public abstract class Report {
 	protected PrintWriter out;
 	/** String value for values that could not be calculated */
 	public static final String NAN = "NaN";
+	public static final String BUFFER_MANAGEMENT_SETTING = "Group.bufferManagement";
+	public static final String BUFFER_SIZE_SETTING = "Group.bufferSize";
 	private String prefix = "";
 	private int precision;
 	protected int warmupTime;
@@ -116,10 +118,12 @@ public abstract class Report {
 			// no output name define -> construct one from report class' name
 			settings.setNameSpace(null);
 			String outDir = settings.getSetting(REPORTDIR_SETTING);
+			outDir += 	settings.getSetting(BUFFER_MANAGEMENT_SETTING) + "/" +
+						settings.getSetting(BUFFER_SIZE_SETTING) + "/";
 			if (!outDir.endsWith("/")) {
 				outDir += "/";	// make sure dir ends with directory delimiter
 			}
-			outFileName = outDir + scenarioName + 
+			outFileName = outDir + scenarioName +
 				"_" + this.getClass().getSimpleName();
 			if (outputInterval == -1) {
 				outFileName += OUT_SUFFIX; // no intervalled reports
