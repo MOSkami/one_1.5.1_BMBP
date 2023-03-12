@@ -57,13 +57,15 @@ public abstract class Report {
 	protected PrintWriter out;
 	/** String value for values that could not be calculated */
 	public static final String NAN = "NaN";
+	public static final String BLUETOOTH_INTERFACE_TRANSMIT_SPEED = "btInterface.transmitSpeed";
 	public static final String BUFFER_MANAGEMENT_SETTING = "Group.bufferManagement";
 	public static final String BUFFER_SIZE_SETTING = "Group.bufferSize";
+	public static final String END_TIME_SETTING = "Scenario.endTime";
+	public static final String ANT_INITIAL_PHEROMONE = "Group.Ant.initialPheromone";
 	private String prefix = "";
 	private int precision;
 	protected int warmupTime;
 	protected Set<String> warmupIDs;
-	
 	private int lastOutputSuffix;
 	private double outputInterval;
 	private double lastReportTime;
@@ -118,8 +120,14 @@ public abstract class Report {
 			// no output name define -> construct one from report class' name
 			settings.setNameSpace(null);
 			String outDir = settings.getSetting(REPORTDIR_SETTING);
-			outDir += 	settings.getSetting(BUFFER_MANAGEMENT_SETTING) + "/" +
-						settings.getSetting(BUFFER_SIZE_SETTING) + "/";
+			outDir +=
+						settings.getSetting(BUFFER_SIZE_SETTING) + "/" +
+//						settings.getSetting(BLUETOOTH_INTERFACE_TRANSMIT_SPEED) + "/" +
+						settings.getSetting(END_TIME_SETTING) + "/" +
+						settings.getSetting(BUFFER_MANAGEMENT_SETTING) + "/" ;
+//			if(settings.contains(ANT_INITIAL_PHEROMONE)){
+//				outDir += settings.getSetting(ANT_INITIAL_PHEROMONE) + "/";
+//			}
 			if (!outDir.endsWith("/")) {
 				outDir += "/";	// make sure dir ends with directory delimiter
 			}

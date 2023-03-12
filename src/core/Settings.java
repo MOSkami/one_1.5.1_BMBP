@@ -388,6 +388,47 @@ public class Settings {
 		outputSetting(fullPropName + " = " + value);
 		return value;
 	}
+
+	public String getSettingFullPropName(String fullPropName) {
+		if (props == null) {
+			init(null);
+		}
+		String value = props.getProperty(fullPropName);
+
+		if (value != null) { // found value, check if run setting can be parsed
+			value = parseRunSetting(value.trim());
+		}
+
+		if ((value == null || value.length() == 0) &&
+				this.secondaryNamespace != null) {
+			// try secondary namespace if the value wasn't found from primary
+//			fullPropName = getFullPropertyName(name, true);
+			value = props.getProperty(fullPropName);
+
+			if (value != null) {
+				value = parseRunSetting(value.trim());
+			}
+		}
+
+		if (value == null || value.length() == 0) {
+			throw new SettingsError("Can't find setting " +
+					getPropertyNamesString(fullPropName));
+		}
+
+		outputSetting(fullPropName + " = " + value);
+		return value;
+	}
+
+	public void setSetting(String name, String value) {
+//		String fullPropName;
+		if (props == null) {
+			init(null);
+		}
+//		fullPropName = getFullPropertyName(name, false);
+		props.setProperty(name, value);
+
+		outputSetting(name + " = " + value);
+	}
 	
 	/**
 	 * Returns the given setting if it exists, or defaultValue if the setting

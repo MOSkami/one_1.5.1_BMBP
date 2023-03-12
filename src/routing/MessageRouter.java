@@ -84,7 +84,9 @@ public abstract class MessageRouter {
 	public static final int DENIED_POLICY = -5;
 	/** Receive return value for unspecified reason */
 	public static final int DENIED_UNSPECIFIED = -99;
-	
+
+	private Settings settings;
+
 	private List<MessageListener> mListeners;
 	/** The messages being transferred with msgID_hostName keys */
 	private HashMap<String, Message> incomingMessages;
@@ -118,7 +120,7 @@ public abstract class MessageRouter {
 		this.bufferSize = Integer.MAX_VALUE; // defaults to rather large buffer	
 		this.msgTtl = Message.INFINITE_TTL;
 		this.applications = new HashMap<String, Collection<Application>>();
-		
+		this.settings = s;
 		if (s.contains(B_SIZE_S)) {
 			this.bufferSize = s.getInt(B_SIZE_S);
 		}
@@ -169,6 +171,7 @@ public abstract class MessageRouter {
 	protected MessageRouter(MessageRouter r) {
 		this.bufferSize = r.bufferSize;
 		this.msgTtl = r.msgTtl;
+		this.settings = r.getSettings();
 		try {
 			Class clazz = Class.forName("bufferManagement."
 					+ r.bufferManagementMode);
@@ -630,5 +633,13 @@ public abstract class MessageRouter {
 		return getClass().getSimpleName() + " of " + 
 			this.getHost().toString() + " with " + getNrofMessages() 
 			+ " messages";
+	}
+
+	public Settings getSettings() {
+		return settings;
+	}
+
+	public void setSettings(Settings settings) {
+		this.settings = settings;
 	}
 }

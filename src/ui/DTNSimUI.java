@@ -85,7 +85,7 @@ public abstract class DTNSimUI {
 	/**
 	 * Initializes the simulator model.
 	 */
-	private void initModel() {
+	public void initModel() {
 		Settings settings = null;
 				
 		try {

@@ -10,7 +10,7 @@ Scenario.simulateConnections = true
 Scenario.updateInterval = 0.1
 # 决定messageRouter.java中的Update函数多久被执行一次，即为场景更新的时间
 # 43200s == 12h
-Scenario.endTime = 21600
+Scenario.endTime = 10800
 # 设置仿真结束时间，单位为秒，默认为12H
 
 
@@ -60,8 +60,9 @@ Scenario.nrofHostGroups = 3
 # Common settings for all groups
 Group.movementModel = ShortestPathMapBasedMovement
 Group.router = EpidemicRouter
-Group.bufferManagement = AntPlusBufferManagement
-Group.bufferSize = 5M
+Group.bufferManagement = AntBufferManagement
+Group.bufferSize = 15M
+Group.Ant.initialPheromone = 0.00025
 Group.waitTime = 0, 120
 # 设置所有组的等待时间为0-120
 # All nodes have the bluetooth interface
@@ -81,12 +82,14 @@ Group.nrofHosts = 40
 # group1 (pedestrians) specific settings 对不同的分组进行不同的设置，设置第一组为行人p
 Group1.groupID = p
 Group1.nrofHosts = 15
-Group1.bufferSize = 5M
+Group1.msgTtl = 250
+Group1.speed = 1, 4
 
 # group2 specific settings 对不同的分组进行设置，设置第二组
 Group2.groupID = c
 Group2.nrofHosts = 30
-Group2.bufferSize = 5M
+Group2.msgTtl = 300
+Group2.speed = 2, 5
 
 # 设置第二组的ID编号为c。即为car
 # cars can drive only on roads 设置第二组只能在道路上移动
@@ -95,8 +98,20 @@ Group2.bufferSize = 5M
 # another group of pedestrians
 Group3.groupID = w
 Group3.nrofHosts = 60
-Group3.bufferSize = 5M
+Group3.msgTtl = 350
+Group3.speed = 5, 7
 
+# The Tram groups
+# Group4.groupID = t
+# Group4.movementModel = MapRouteMovement
+# Group4.routeFile = data/tram3.wkt
+# Group4.routeType = 1
+# Group4.waitTime = 10, 30
+# Group4.speed = 7, 10
+# Group4.nrofHosts = 4
+# Group4.nrofInterfaces = 2
+# Group4.interface1 = btInterface
+# Group4.interface2 = highspeedInterface
 
 ## Message creation parameters 
 # How many event generators

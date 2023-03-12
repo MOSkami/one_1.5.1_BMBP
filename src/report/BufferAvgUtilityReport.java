@@ -51,10 +51,10 @@ public class BufferAvgUtilityReport extends Report implements MessageListener{
             int count = 0;
             for(Iterator<Map.Entry<DTNHost,Double>> it=set.iterator();it.hasNext();){
                 Map.Entry<DTNHost,Double> entry=(Map.Entry<DTNHost,Double>)it.next();
-                resultMsg+=String.format("%4d",entry.getKey().getAddress())+" "
-                        +String.format("%10.2f", this.getBufferTotal(entry.getKey()))+" "
-                        +format(this.getBufferUsed(entry.getKey()))+" "//在程序退出前一刻的已使用缓存
-                        +format(entry.getValue())+"\n";
+//                resultMsg+=String.format("%4d",entry.getKey().getAddress())+" "
+//                        +String.format("%10.2f", this.getBufferTotal(entry.getKey()))+" "
+//                        +format(this.getBufferUsed(entry.getKey()))+" "//在程序退出前一刻的已使用缓存
+//                        +format(entry.getValue())+"\n";
                 bufferUsedAvg_sum += this.getBufferUsed(entry.getKey());
                 bufferUtilityRatioAvg_sum += entry.getValue();
                 count ++;

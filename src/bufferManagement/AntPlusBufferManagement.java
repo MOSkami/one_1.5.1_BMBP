@@ -7,10 +7,7 @@ import core.SimError;
 import routing.MessageRouter;
 import util.Tuple;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class AntPlusBufferManagement extends BufferManagement{
 
@@ -21,11 +18,17 @@ public class AntPlusBufferManagement extends BufferManagement{
         super(r);
         this.pheromones = new HashMap<String, Double>();
         this.pheromonesAccumulate = new HashMap<String, Double>();
-        String[] str = new String[]{"pp","pc","pw",
-                "cp","cc","cw",
-                "wp","wc","ww",};
-        for(String c:str){
-            this.pheromonesAccumulate.put(c, 1.);
+        int groupNum = Integer.parseInt(r.getSettings().getSettingFullPropName("Scenario.nrofHostGroups"));
+        List<String> strs = new ArrayList<String>();
+        for(int i = 1;i <= groupNum;i++){
+            for(int j = 1;j <= groupNum;j++){
+                String left = r.getSettings().getSettingFullPropName("Group"+i+".groupID");
+                String right = r.getSettings().getSettingFullPropName("Group"+j+".groupID");
+                strs.add(left+right);
+            }
+        }
+        for(String c:strs){
+            this.pheromonesAccumulate.put(c, Double.parseDouble(r.getSettings().getSetting("Ant.initialPheromone")));
         }
     }
 
@@ -73,9 +76,9 @@ public class AntPlusBufferManagement extends BufferManagement{
                         String key1 = m1.getFrom().getGroupId() + m1.getTo().getGroupId();
                         String key2 = m2.getFrom().getGroupId() + m2.getTo().getGroupId();
                         if(key1.equals(key2)){
-//                                    diff = m2.getTtl() / ((double)m2.getSize()) -
-//                                            m1.getTtl() / ((double)m1.getSize());
-                            diff = m1.getPathLength() - m2.getPathLength();
+                            diff = m2.getTtl()  / ((double)m2.getSize() *  m2.getPathLength()) -
+                                   m1.getTtl()  / ((double)m1.getSize() *  m1.getPathLength());
+//                            diff = m1.getPathLength() - m2.getPathLength();
                             if(diff == 0) return 0;
                             return (diff < 0 ? -1 : 1);
                         }
@@ -89,9 +92,9 @@ public class AntPlusBufferManagement extends BufferManagement{
                         }else if (pheromonesAccumulate.containsKey(key1)){
                             return 1;
                         }else{
-//                                    diff = m2.getTtl() / ((double)m2.getSize()) -
-//                                            m1.getTtl() / ((double)m1.getSize());
-                            diff = (1 / (double)m2.getPathLength() - 1 / (double)m1.getPathLength());
+                            diff = m2.getTtl()  / ((double)m2.getSize() *  m2.getPathLength()) -
+                                   m1.getTtl()  / ((double)m1.getSize() *  m1.getPathLength());
+//                          diff = (1 / (double)m2.getPathLength() - 1 / (double)m1.getPathLength());
                         }
                         if(diff == 0.0f ) return 0;
                         return (diff < 0 ? -1 : 1);
@@ -117,12 +120,10 @@ public class AntPlusBufferManagement extends BufferManagement{
         String key = m.getFrom().getGroupId() + m.getTo().getGroupId();
         if(pheromones.containsKey(key)) {
             pheromones.put(key,
-                    pheromones.get(key) + ((m.getTtl()) /
-                            ((double)m.getSize())));
+                    pheromones.get(key) + m.getTtl()  / ((double)m.getSize() *  m.getPathLength()));
 
         }else {
-            pheromones.put(key,1 / ((m.getTtl()) /
-                    ((double)m.getSize() )));
+            pheromones.put(key, m.getTtl()  / ((double)m.getSize() *  m.getPathLength()));
         }
     }
 

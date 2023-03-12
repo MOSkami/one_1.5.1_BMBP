@@ -9,12 +9,11 @@ import util.Tuple;
 
 import java.util.*;
 
-public class AntBufferManagement extends BufferManagement{
-
+public class AntPlus3BufferManagement extends BufferManagement{
     public HashMap<String, Double> pheromones;
     public HashMap<String, Double> pheromonesAccumulate;
     public static double ro = 0.5;
-    public AntBufferManagement(MessageRouter r) {
+    public AntPlus3BufferManagement(MessageRouter r) {
         super(r);
         this.pheromones = new HashMap<String, Double>();
         this.pheromonesAccumulate = new HashMap<String, Double>();
@@ -31,27 +30,23 @@ public class AntBufferManagement extends BufferManagement{
             this.pheromonesAccumulate.put(c, Double.parseDouble(r.getSettings().getSetting("Ant.initialPheromone")));
         }
     }
-
     @Override
     public int compareByQueueMode(Message m1, Message m2) {
         String key1 = m1.getFrom().getGroupId() + m1.getTo().getGroupId();
         String key2 = m2.getFrom().getGroupId() + m2.getTo().getGroupId();
         double diff = 0;
-        if (pheromonesAccumulate.containsKey(key2) &&
-                pheromonesAccumulate.containsKey(key1)) {
-            diff = this.getPheromoneAccumulateValue(key2) -
-                    getPheromoneAccumulateValue(key1);
-        } else if (pheromonesAccumulate.containsKey(key2)) {
-            return -1;
-        } else if (pheromonesAccumulate.containsKey(key1)) {
-            return 1;
-        } else {
-            return 0;
+        double m1Weight = 1 / ((double) m1.getPathLength());
+        double m2Weight = 1 / ((double) m2.getPathLength());
+        if(pheromonesAccumulate.containsKey(key1)){
+            m1Weight += getPheromoneAccumulateValue(key1);
         }
+        if(pheromonesAccumulate.containsKey(key2)){
+            m2Weight += getPheromoneAccumulateValue(key2);
+        }
+        diff = m2Weight - m1Weight;
         if (diff == 0.0f) return 0;
         return (diff < 0 ? -1 : 1);
     }
-
     @Override
     public List sortByQueueMode(List list) {
         Collections.sort(list,
@@ -75,42 +70,21 @@ public class AntBufferManagement extends BufferManagement{
                         }
                         String key1 = m1.getFrom().getGroupId() + m1.getTo().getGroupId();
                         String key2 = m2.getFrom().getGroupId() + m2.getTo().getGroupId();
-                        if(key1.equals(key2)){
-                            diff = m1.getPathLength() - m2.getPathLength();
-                            if(diff == 0) return 0;
-                            return (diff < 0 ? -1 : 1);
+                        double m1Weight = 1 / ((double) m1.getPathLength());
+                        double m2Weight = 1 / ((double) m2.getPathLength());
+                        if(pheromonesAccumulate.containsKey(key1)){
+                            m1Weight += getPheromoneAccumulateValue(key1);
                         }
-                        if(pheromonesAccumulate.containsKey(key2) &&
-                                pheromonesAccumulate.containsKey(key1)) {
-                            diff = getPheromoneAccumulateValue(key2) -
-                                    getPheromoneAccumulateValue(key1);
+                        if(pheromonesAccumulate.containsKey(key2)){
+                            m2Weight += getPheromoneAccumulateValue(key2);
                         }
-                        else if (pheromonesAccumulate.containsKey(key2)) {
-                            return -1;
-                        }else if (pheromonesAccumulate.containsKey(key1)){
-                            return 1;
-                        }else{
-                            diff = (1 / (double)m2.getPathLength() - 1 / (double)m1.getPathLength());
-                        }
+                        diff = m2Weight - m1Weight;
                         if(diff == 0.0f ) return 0;
                         return (diff < 0 ? -1 : 1);
                     }
                 });
         return list;
     }
-
-
-    public void receiveMessage(Message m, DTNHost from) {
-        String key = m.getFrom().getGroupId() + m.getTo().getGroupId();
-        if(pheromones.containsKey(key)) {
-            pheromones.put(key,
-                    pheromones.get(key) + 1 / (double) m.getPathLength());
-
-        }else {
-            pheromones.put(key,1 / (double) m.getPathLength());
-        }
-    }
-
     public void update(){
         for (String key : pheromones.keySet()) {
             if(pheromonesAccumulate.containsKey(key)) {
@@ -123,19 +97,25 @@ public class AntBufferManagement extends BufferManagement{
         }
         pheromones.clear();
     }
+    public void receiveMessage(Message m, DTNHost from) {
+        String key = m.getFrom().getGroupId() + m.getTo().getGroupId();
+        if(pheromones.containsKey(key)) {
+            pheromones.put(key,
+                    pheromones.get(key) + 1  / ((double) m.getPathLength()));
 
+        }else {
+            pheromones.put(key, 1  / ((double) m.getPathLength()));
+        }
+    }
     public HashMap<String, Double> getPheromones() {
         return pheromones;
     }
-
     public void setPheromones(HashMap<String, Double> pheromones) {
         this.pheromones = pheromones;
     }
-
     public HashMap<String, Double> getPheromonesAccumulate() {
         return pheromonesAccumulate;
     }
-
     public void setPheromonesAccumulate(HashMap<String, Double> pheromonesAccumulate) {
         this.pheromonesAccumulate = pheromonesAccumulate;
     }

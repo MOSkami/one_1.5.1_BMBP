@@ -51,9 +51,9 @@ public class NetworkOverheadReport extends Report implements MessageListener{
             int count = 0;
             for(Iterator<Map.Entry<Message,Integer>> it=set.iterator();it.hasNext();){
                 Map.Entry<Message,Integer> entry=(Map.Entry<Message,Integer>)it.next();
-                resultMsg+=String.format("%4d",entry.getKey().getFrom().getAddress())+" "
-                        +String.format("%4d",entry.getKey().getTo().getAddress())+" "
-                        +format(entry.getValue())+"\n";
+//                resultMsg+=String.format("%4d",entry.getKey().getFrom().getAddress())+" "
+//                        +String.format("%4d",entry.getKey().getTo().getAddress())+" "
+//                        +format(entry.getValue())+"\n";
                 pathLength_sum += entry.getValue();
                 count ++;
             }
@@ -74,9 +74,7 @@ public class NetworkOverheadReport extends Report implements MessageListener{
     }
 
     @Override
-    public void messageTransferStarted(Message m, DTNHost from, DTNHost to) {
-        
-    }
+    public void messageTransferStarted(Message m, DTNHost from, DTNHost to) {}
 
     @Override
     public void messageDeleted(Message m, DTNHost where, boolean dropped) {
@@ -84,9 +82,7 @@ public class NetworkOverheadReport extends Report implements MessageListener{
     }
 
     @Override
-    public void messageTransferAborted(Message m, DTNHost from, DTNHost to) {
-        
-    }
+    public void messageTransferAborted(Message m, DTNHost from, DTNHost to) {}
 
     @Override
     public void messageTransferred(Message m, DTNHost from, DTNHost to, boolean firstDelivery) {
@@ -95,7 +91,4 @@ public class NetworkOverheadReport extends Report implements MessageListener{
             updateHostBufferUtility(m);
         }
     }
-
-    
-    
 }

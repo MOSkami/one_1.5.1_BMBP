@@ -21,6 +21,7 @@ public class EpidemicRouterTest extends AbstractRouterTest {
 	public void setUp() throws Exception {
 		ts.putSetting(MessageRouter.MSG_TTL_S, ""+TTL);
 		ts.putSetting(MessageRouter.B_SIZE_S, ""+BUFFER_SIZE);
+		ts.putSetting(MessageRouter.BUFFER_MANAGEMENT_MODE_S, "AntPlusBufferManagement");
 		setRouterProto(new EpidemicRouter(ts));
 		super.setUp();
 	}
