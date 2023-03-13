@@ -80,7 +80,7 @@ public class NoGuiBatchGenerationTest extends DTNSimUI {
             String[] bufferManagements = new String[]{
                                                         "AntPlusBufferManagement",
                                                         "AntPlus2BufferManagement",
-                                                        "AntPlus3BufferManagement",
+                                                        "BMBPBufferManagement",
                                                         "FifoBufferManagement",
                                                         "HopsBufferManagement",
                                                         "RandomBufferManagement"};
@@ -98,7 +98,7 @@ public class NoGuiBatchGenerationTest extends DTNSimUI {
                         }
                         if(bm.equals("AntPlus2BufferManagement") || bm.equals("AntPlusBufferManagement"))
                             settings.setSetting("Group.Ant.initialPheromone", 0.0037+"");
-                        if(bm.equals("AntBufferManagement") || bm.equals("AntPlus3BufferManagement"))
+                        if(bm.equals("AntBufferManagement") || bm.equals("BMBPBufferManagement"))
                             settings.setSetting("Group.Ant.initialPheromone", initialPheromone+"");
 //                        settings.setSetting("Report.reportDir", "reports_transmitSpeed/");
                         settings.setSetting("Report.reportDir", "reports/");
