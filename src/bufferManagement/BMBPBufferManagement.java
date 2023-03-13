@@ -9,11 +9,11 @@ import util.Tuple;
 
 import java.util.*;
 
-public class AntPlus3BufferManagement extends BufferManagement{
+public class BMBPBufferManagement extends BufferManagement{
     public HashMap<String, Double> pheromones;
     public HashMap<String, Double> pheromonesAccumulate;
     public static double ro = 0.5;
-    public AntPlus3BufferManagement(MessageRouter r) {
+    public BMBPBufferManagement(MessageRouter r) {
         super(r);
         this.pheromones = new HashMap<String, Double>();
         this.pheromonesAccumulate = new HashMap<String, Double>();
